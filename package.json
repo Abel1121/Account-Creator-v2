@@ -1,0 +1,30 @@
+{
+  "name": "acc-creator-v2",
+  "version": "1.5.0",
+  "description": "League of Legends account Creator",
+  "main": "index.html",
+  "dependencies": {
+    "browserify": "^16.5.0",
+    "node-fetch": "^2.6.0",
+    "puppeteer": "^1.20.0",
+    "puppeteer-core": "^2.1.1",
+    "ws": "^7.2.1"
+  },
+  "browserslist": [
+    "last 3 Chrome versions"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify accountCreator.js -o bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abel1121/Account-Creator-v2.git"
+  },
+  "author": "Marek Kobyliński",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abel1121/Account-Creator-v2/issues"
+  },
+  "homepage": "https://github.com/Abel1121/Account-Creator-v2#readme"
+}
