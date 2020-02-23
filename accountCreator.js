@@ -7,7 +7,7 @@ const fetch = require("node-fetch");
 // const submit = document.querySelector('.submit');
 // submit.addEventListener('click', (e) => {
 let server = "EUNE";
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 5; i++) {
     const nickList = ['White', 'Red', 'Yellow', 'Blue', 'Black', 'Brown', 'Orange', 'Grey', 'Green', 'Gold', 'Silver', 'Bronze', 'Diamond', 'Platinium', 'Challenger', 'Knight', 'Tank', 'Archer', 'Palladin', 'Druid', 'Sorccer', 'Human', 'Goblin', 'Dragon', 'Angel', 'Unicorn', 'Minotaur', 'Golem', 'Devil', 'Demon', 'Giant', 'Titan', 'Energy', 'Power', 'Master', 'Slime', 'Orc',
         'Minions', 'Tower', 'King', 'Lord', 'Fighter', 'Noob', 'Smart', 'Maximum', 'Mighty', 'Stinky', 'Creepy', 'Blody', 'Crazy', 'Alcoholic', 'Special', 'Angry', 'Dirty', 'Secret', 'Retarded', 'Pscyho', 'Extreme', 'Zombie', 'Bikini', 'Smelly', 'Maniac', 'Penguin', 'Combat', 'Rat', 'Mecha', 'Clones', 'Super', 'Metal', 'Hidden', 'Dark', 'Icy', 'Sweet', 'Twin', 'Rage', 'Slayer', 'Thunder', 'Push'];
     let a = Math.random() * nickList.length;
@@ -21,7 +21,7 @@ for (let i = 0; i < 3; i++) {
     (async () => {
         const browser = await puppeteer.launch({
             headless: false,
-            slowMo: 25,
+            slowMo: 40,
         });
         const page = await browser.newPage();
         await page.setViewport({
@@ -95,21 +95,19 @@ for (let i = 0; i < 3; i++) {
             if (i === 0) {
                 await page.click("input[name=username]", { clickCount: 3 })
                 await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)] + "s");
-                nickname = await page.$eval('input[name=username]', e => e.value);
             } else if (i === 1) {
                 await page.click("input[name=username]", { clickCount: 3 })
                 await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)]);
-                nickname = await page.$eval('input[name=username]', e => e.value);
             } else if (i === 2) {
                 await page.click("input[name=username]", { clickCount: 3 })
                 await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)] + "s");
-                nickname = await page.$eval('input[name=username]', e => e.value);
             }
             // console.log(h1 + " loop " + i, "nickname: " + nickname)
             i++
+            nickname = await page.$eval('input[name=username]', e => e.value);
+            page.keyboard.press('Enter');
             await page.waitForNavigation({ waitUntil: 'networkidle0' })
-            page.keyboard.press('Enter')
-            h1 = await page.$eval('h1', e => e.innerText);
+            h1 = await page.$eval('h1', e => e.click());
         }
         await page.waitForSelector('.download-button', {
             visible: true,
