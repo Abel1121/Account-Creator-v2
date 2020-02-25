@@ -16,7 +16,7 @@ for (let i = 0; i < 5; i++) {
     function randomNumber(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
     };
-    let password = Math.random().toString(36).slice(2);
+    let password = Math.random().toString(36).slice(2) + "A1";
     let email = nickname + "@gmail.sc";
     (async () => {
         const browser = await puppeteer.launch({
@@ -88,7 +88,7 @@ for (let i = 0; i < 5; i++) {
             document.querySelector('#g-recaptcha-response').innerText = token;
         }, token)
         await page.click('div[class="next-button"]');
-        await page.waitForNavigation({ waitUntil: 'networkidle0' })
+        await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 10000 }).catch(error => console.log(error));
         let h1 = await page.$eval('h1', e => e.innerText);
         while (h1 == "EVERYTHING LOOK GOOD?") {
             // console.log("false")
@@ -106,7 +106,7 @@ for (let i = 0; i < 5; i++) {
             i++
             nickname = await page.$eval('input[name=username]', e => e.value);
             page.keyboard.press('Enter');
-            await page.waitForNavigation({ waitUntil: 'networkidle0' })
+            await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 10000 }).catch(error => console.log(error));
             h1 = await page.$eval('h1', e => e.click());
         }
         await page.waitForSelector('.download-button', {
