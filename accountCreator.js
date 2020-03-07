@@ -7,7 +7,7 @@ const fetch = require("node-fetch");
 // const submit = document.querySelector('.submit');
 // submit.addEventListener('click', (e) => {
 let server = "EUNE";
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 2; i++) {
     const nickList = ['White', 'Red', 'Yellow', 'Blue', 'Black', 'Brown', 'Orange', 'Grey', 'Green', 'Gold', 'Silver', 'Bronze', 'Diamond', 'Platinium', 'Challenger', 'Knight', 'Tank', 'Archer', 'Palladin', 'Druid', 'Sorccer', 'Human', 'Goblin', 'Dragon', 'Angel', 'Unicorn', 'Minotaur', 'Golem', 'Devil', 'Demon', 'Giant', 'Titan', 'Energy', 'Power', 'Master', 'Slime', 'Orc',
         'Minions', 'Tower', 'King', 'Lord', 'Fighter', 'Noob', 'Smart', 'Maximum', 'Mighty', 'Stinky', 'Creepy', 'Blody', 'Crazy', 'Alcoholic', 'Special', 'Angry', 'Dirty', 'Secret', 'Retarded', 'Pscyho', 'Extreme', 'Zombie', 'Bikini', 'Smelly', 'Maniac', 'Penguin', 'Combat', 'Rat', 'Mecha', 'Clones', 'Super', 'Metal', 'Hidden', 'Dark', 'Icy', 'Sweet', 'Twin', 'Rage', 'Slayer', 'Thunder', 'Push'];
     let a = Math.random() * nickList.length;
@@ -20,8 +20,13 @@ for (let i = 0; i < 5; i++) {
     let email = nickname + "@gmail.sc";
     (async () => {
         const browser = await puppeteer.launch({
+            // ignoreDefaultArgs: ['--disable-extensions'],
             headless: false,
-            slowMo: 40,
+            defaultViewport: null,
+            slowMo: 10,
+            // args: ['--proxy-server=8.209.89.251:3128']
+            // executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+            // args: ['--user-data-dir=C:/users/mark/Google/Chrome/User Data']
         });
         const page = await browser.newPage();
         await page.setViewport({
@@ -89,35 +94,43 @@ for (let i = 0; i < 5; i++) {
         }, token)
         await page.click('div[class="next-button"]');
         await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 10000 }).catch(error => console.log(error));
-        let h1 = await page.$eval('h1', e => e.innerText);
-        while (h1 == "EVERYTHING LOOK GOOD?") {
-            // console.log("false")
+        await page.waitFor(2000)
+        let currentURL = page.url();
+        console.log(currentURL);
+        currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation` ? console.log(true) : console.log(false);
+        while (currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation`) {
+            console.log("false")
+            await page.waitFor(2000)
+            await page.click("input[name=username]", { clickCount: 3 })
             if (i === 0) {
-                await page.click("input[name=username]", { clickCount: 3 })
+                // await page.click("input[name=username]", { clickCount: 3 })
                 await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)] + "s");
             } else if (i === 1) {
-                await page.click("input[name=username]", { clickCount: 3 })
+                // await page.click("input[name=username]", { clickCount: 3 })
                 await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)]);
             } else if (i === 2) {
-                await page.click("input[name=username]", { clickCount: 3 })
+                // await page.click("input[name=username]", { clickCount: 3 })
                 await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)] + "s");
             }
-            // console.log(h1 + " loop " + i, "nickname: " + nickname)
+            console.log(currentURL + " loop " + i, "nickname: " + nickname)
             i++
             nickname = await page.$eval('input[name=username]', e => e.value);
             page.keyboard.press('Enter');
             await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 10000 }).catch(error => console.log(error));
-            h1 = await page.$eval('h1', e => e.click());
+            await page.waitFor(1000)
+            currentURL = page.url();
+            console.log(page.url());
         }
         await page.waitForSelector('.download-button', {
             visible: true,
         })
-        h1 = await page.$eval('h1', e => e.innerText);
+        console.log(page.url());
         if (server === "EUNE") {
             server = "EUN"
         }
         console.log(server + ":" + nickname + ":" + password)
-        h1 === "YOU'RE ALL SET!" ? await browser.close() : console.log("something is wrong")
+        await browser.close()
+        debugger;
     })()
 }
 // })
