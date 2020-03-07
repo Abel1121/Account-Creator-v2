@@ -5,10 +5,12 @@
   "main": "index.html",
   "dependencies": {
     "browserify": "^16.5.0",
+    "express": "^4.17.1",
     "node": "^13.10.1",
     "node-fetch": "^2.6.0",
     "puppeteer": "^1.20.0",
     "puppeteer-core": "^2.1.1",
+    "tiny-async-pool": "^1.1.0",
     "ws": "^7.2.1"
   },
   "browserslist": [
