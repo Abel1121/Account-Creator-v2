@@ -6,8 +6,8 @@ const fetch = require("node-fetch");
 // const nicknameList = document.querySelector('.nickname_list');
 // const submit = document.querySelector('.submit');
 // submit.addEventListener('click', (e) => {
-let server = "EUNE";
-for (let i = 0; i < 2; i++) {
+
+function AccountCreater(server, key) {
     const nickList = ['White', 'Red', 'Yellow', 'Blue', 'Black', 'Brown', 'Orange', 'Grey', 'Green', 'Gold', 'Silver', 'Bronze', 'Diamond', 'Platinium', 'Challenger', 'Knight', 'Tank', 'Archer', 'Palladin', 'Druid', 'Sorccer', 'Human', 'Goblin', 'Dragon', 'Angel', 'Unicorn', 'Minotaur', 'Golem', 'Devil', 'Demon', 'Giant', 'Titan', 'Energy', 'Power', 'Master', 'Slime', 'Orc',
         'Minions', 'Tower', 'King', 'Lord', 'Fighter', 'Noob', 'Smart', 'Maximum', 'Mighty', 'Stinky', 'Creepy', 'Blody', 'Crazy', 'Alcoholic', 'Special', 'Angry', 'Dirty', 'Secret', 'Retarded', 'Pscyho', 'Extreme', 'Zombie', 'Bikini', 'Smelly', 'Maniac', 'Penguin', 'Combat', 'Rat', 'Mecha', 'Clones', 'Super', 'Metal', 'Hidden', 'Dark', 'Icy', 'Sweet', 'Twin', 'Rage', 'Slayer', 'Thunder', 'Push'];
     let a = Math.random() * nickList.length;
@@ -58,7 +58,7 @@ for (let i = 0; i < 2; i++) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                key: "d8165f7c75664ca75b4d0a63fe113190",
+                key: key,
                 method: "userrecaptcha",
                 googlekey: "6Lc3HAsUAAAAACsN7CgY9MMVxo2M09n_e4heJEiZ",
                 pageurl: "https://signup.euw.leagueoflegends.com/en/signup/index#/registration",
@@ -98,8 +98,9 @@ for (let i = 0; i < 2; i++) {
         let currentURL = page.url();
         console.log(currentURL);
         currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation` ? console.log(true) : console.log(false);
+        let i = 0;
         while (currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation`) {
-            console.log("false")
+            // console.log("false")
             await page.waitFor(2000)
             await page.click("input[name=username]", { clickCount: 3 })
             if (i === 0) {
@@ -119,18 +120,18 @@ for (let i = 0; i < 2; i++) {
             await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 10000 }).catch(error => console.log(error));
             await page.waitFor(1000)
             currentURL = page.url();
-            console.log(page.url());
+            // console.log(page.url());
         }
         await page.waitForSelector('.download-button', {
             visible: true,
         })
-        console.log(page.url());
-        if (server === "EUNE") {
+        // console.log(page.url());
+        if (server == "EUNE") {
             server = "EUN"
         }
         console.log(server + ":" + nickname + ":" + password)
         await browser.close()
-        debugger;
     })()
 }
-// })
+
+module.exports = AccountCreater;
