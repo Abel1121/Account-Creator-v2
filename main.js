@@ -2,7 +2,7 @@ const AccountCreator = require('./accountCreator')
 
 AccountCreator(
     serwer = "EUNE",
-    key = 'd8165f7c75664ca75b4d0a63fe113190',
+    key = '63122cc0e691b00865562b861d5597b2',
     howMany = 2
 )
 

@@ -40,45 +40,7 @@ function AccountCreater(server, key, howMany) {
             await page.click('div[class=checkbox-indicator]');
             await page.click('div[class="next-button"]');
             await page.click('div[class="app-component"]');
-
-            let id = 0;
-            await fetch("https://2captcha.com/in.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    key: key,
-                    method: "userrecaptcha",
-                    googlekey: "6Lc3HAsUAAAAACsN7CgY9MMVxo2M09n_e4heJEiZ",
-                    pageurl: "https://signup.euw.leagueoflegends.com/en/signup/index#/registration",
-                    json: "1"
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    id = data.request
-                })
-                .catch(err => console.error(err))
-
             let token = 'CAPCHA_NOT_READY';
-            while (token === "CAPCHA_NOT_READY") {
-                await fetch(`https://2captcha.com/res.php?key=d8165f7c75664ca75b4d0a63fe113190&action=get&id=${id}&json=1`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.request === 'CAPCHA_NOT_READY') {
-
-                        } else {
-                            token = data.request
-                        }
-                    })
-                    .catch(err => console.error(err))
-            }
             await page.evaluate((token) => {
                 document.querySelector('#g-recaptcha-response').innerText = token;
             }, token)
@@ -86,24 +48,77 @@ function AccountCreater(server, key, howMany) {
             await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 10000 }).catch(error => console.log(error));
             await page.waitFor(2000)
             let currentURL = page.url();
-            console.log(currentURL);
-            currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation` ? console.log(true) : console.log(false);
+            // console.log(currentURL);
+            // currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation` ? console.log(true) : console.log(false);
             let i = 0;
             while (currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation`) {
                 await page.waitFor(2000)
                 await page.click("input[name=username]", { clickCount: 3 })
                 if (i === 0) {
-                    await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)] + "s");
+                    await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)]);
+                    await page.click('div[class="app-component"]');
+                    page.keyboard.press('Enter');
+                    let id = 0;
+                    await fetch("https://2captcha.com/in.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            key: key,
+                            method: "userrecaptcha",
+                            googlekey: "6Lc3HAsUAAAAACsN7CgY9MMVxo2M09n_e4heJEiZ",
+                            pageurl: "https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation",
+                            json: "1"
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            id = data.request
+                            console.log(id)
+                        })
+                        .catch(err => console.error(err))
+
+                    token = 'CAPCHA_NOT_READY';
+                    while (token === "CAPCHA_NOT_READY") {
+                        await fetch(`https://2captcha.com/res.php?key=${key}&action=get&id=${id}&json=1`, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.request === 'CAPCHA_NOT_READY') {
+
+                                } else {
+                                    token = data.request
+                                }
+                            })
+                            .catch(err => console.error(err))
+                    }
+                    await page.evaluate((token) => {
+                        document.querySelector('#g-recaptcha-response').innerText = token;
+                    }, token)
+                    console.log("one")
+
                 } else if (i === 1) {
-                    await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)]);
+                    await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)] + "s");
                 } else if (i === 2) {
+                    await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)]);
+                } else if (i === 3) {
                     await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)] + "s");
                 }
+                console.log("send");
+                await page.waitFor(1000);
+                await page.waitForSelector('input[name=username]');
+                nickname = await page.$eval("input[name=username]", e => e.value);
+                console.log(nickname)
                 i++
-                nickname = await page.$eval('input[name=username]', e => e.value);
-                page.keyboard.press('Enter');
-                await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 0 }).catch(error => console.log(error));
-
+                await page.waitFor(1000)
+                await page.click('div[class="next-button"]');
+                await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 5000 }).catch(error => console.log(error));
+                console.log("reload")
                 currentURL = page.url();
             }
             await page.waitForSelector('.download-button', {
