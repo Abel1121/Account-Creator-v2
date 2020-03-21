@@ -5,7 +5,7 @@ const fetch = require("node-fetch");
 
 function AccountCreater(server, key, howMany) {
     for (let i = 0; i < howMany; i++) {
-        const nickList = ['Change','Full','Skill','Skull','Fairy','Buddie','Shard','Ninja','Keeper','Fantastic','Romance','Papa','Pengiun', 'Nami', 'Cat', 'White', 'Red', 'Yellow', 'Blue', 'Black', 'Brown', 'Orange', 'Grey', 'Green', 'Gold', 'Silver', 'Bronze', 'Diamond', 'Platinium', 'Challenger', 'Knight', 'Tank', 'Archer', 'Palladin', 'Druid', 'Sorccer', 'Human', 'Goblin', 'Dragon', 'Angel', 'Unicorn', 'Minotaur', 'Golem', 'Devil', 'Demon', 'Giant', 'Titan', 'Energy', 'Power', 'Master', 'Slime', 'Orc',
+        const nickList = ['Jankos','Change','Full','Skill','Skull','Fairy','Buddie','Shard','Ninja','Keeper','Fantastic','Romance','Papa','Pengiun', 'Nami', 'Cat', 'White', 'Red', 'Yellow', 'Blue', 'Black', 'Brown', 'Orange', 'Grey', 'Green', 'Gold', 'Silver', 'Bronze', 'Diamond', 'Platinium', 'Challenger', 'Knight', 'Tank', 'Archer', 'Palladin', 'Druid', 'Sorccer', 'Human', 'Goblin', 'Dragon', 'Angel', 'Unicorn', 'Minotaur', 'Golem', 'Devil', 'Demon', 'Giant', 'Titan', 'Energy', 'Power', 'Master', 'Slime', 'Orc',
             'Minions', 'Tower', 'King', 'Lord', 'Fighter', 'Noob', 'Smart', 'Maximum', 'Mighty', 'Stinky', 'Creepy', 'Blody', 'Crazy', 'Alcoholic', 'Special', 'Angry', 'Dirty', 'Secret', 'Retarded', 'Pscyho', 'Extreme', 'Zombie', 'Bikini', 'Smelly', 'Maniac', 'Penguin', 'Combat', 'Rat', 'Mecha', 'Clones', 'Super', 'Metal', 'Hidden', 'Dark', 'Icy', 'Sweet', 'Twin', 'Rage', 'Slayer', 'Thunder', 'Push'];
         let a = Math.random() * nickList.length;
         let b = Math.random() * nickList.length;
@@ -14,7 +14,7 @@ function AccountCreater(server, key, howMany) {
         let email = nickname + "@gmail.sc";
         (async () => {
             const browser = await puppeteer.launch({
-                headless: false,
+                headless: true,
                 defaultViewport: null,
                 slowMo: 10,
             });
@@ -51,6 +51,7 @@ function AccountCreater(server, key, howMany) {
             // console.log(currentURL);
             // currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation` ? console.log(true) : console.log(false);
             let i = 0;
+            let id = 0;
             while (currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation`) {
                 await page.waitFor(2000)
                 await page.click("input[name=username]", { clickCount: 3 })
@@ -58,7 +59,6 @@ function AccountCreater(server, key, howMany) {
                     await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)]);
                     await page.click('div[class="app-component"]');
                     page.keyboard.press('Enter');
-                    let id = 0;
                     await fetch("https://2captcha.com/in.php", {
                         method: "POST",
                         headers: {
@@ -100,7 +100,7 @@ function AccountCreater(server, key, howMany) {
                     await page.evaluate((token) => {
                         document.querySelector('#g-recaptcha-response').innerText = token;
                     }, token)
-                    console.log("one")
+                    // console.log("one")
 
                 } else if (i === 1) {
                     await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)] + "s");
@@ -109,16 +109,40 @@ function AccountCreater(server, key, howMany) {
                 } else if (i === 3) {
                     await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)] + "s");
                 }
-                console.log("send");
+                // console.log("send");
                 await page.waitFor(1000);
                 await page.waitForSelector('input[name=username]');
                 nickname = await page.$eval("input[name=username]", e => e.value);
-                console.log(nickname)
+                // console.log(nickname)
                 i++
                 await page.waitFor(1000)
                 await page.click('div[class="next-button"]');
+
+                await page.on('response', async(response) => {    
+                    if (response.url() == "https://signup-api.leagueoflegends.com/v1/accounts"){
+                        if (response._status != 200) {
+                            await response.json().then(data => {
+                                console.log(data.fields)
+                                if(data.fields.username == 'ValueNotUnique') {
+                                    console.log("Nick zajęty wybierz inny")
+                                }
+                                else if(data.fields.captcha == 'InvalidToken') {
+                                    i--
+                                    console.log("captcha is invalid")
+                                    fetch(`https://2captcha.com/res.php?key=${key}}&action=reportbad&id=${id}`, {
+                                        method: "GET",
+                                        headers: {
+                                            "Content-Type": "application/json"
+                                        },
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {console.log(data)})
+                                        .catch(err => {console.error(err)})
+                                }
+                            })} 
+                    }}); 
                 await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 5000 }).catch(error => console.log());
-                console.log("reload");
+                // console.log("reload");
                 currentURL = page.url();
             }
             await page.waitForSelector('.download-button', {
