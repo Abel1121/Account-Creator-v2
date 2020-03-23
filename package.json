@@ -4,19 +4,22 @@
   "description": "League of Legends account Creator",
   "main": "main.js",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "browserify": "^16.5.0",
     "express": "^4.17.1",
-    "node": "^13.10.1",
+    "node": "^13.11.0",
     "node-fetch": "^2.6.0",
-    "puppeteer": "^1.20.0",
+    "nodemon": "^2.0.2",
+    "puppeteer": "^2.1.1",
     "puppeteer-core": "^2.1.1",
     "tiny-async-pool": "^1.1.0",
-    "ws": "^7.2.1"
+    "ws": "^7.2.3"
   },
   "browserslist": [
     "last 3 Chrome versions"
   ],
   "scripts": {
+    "start": "nodemon main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify accountCreator.js -o bundle.js"
   },

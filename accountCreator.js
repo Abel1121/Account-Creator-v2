@@ -14,9 +14,9 @@ function AccountCreater(server, key, howMany) {
         let email = nickname + "@gmail.sc";
         (async () => {
             const browser = await puppeteer.launch({
-                headless: true,
+                headless: false,
                 defaultViewport: null,
-                slowMo: 10,
+                slowMo: 20,
             });
             const page = await browser.newPage();
             await page.setViewport({
@@ -48,11 +48,13 @@ function AccountCreater(server, key, howMany) {
             await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 10000 }).catch(error => console.log(error));
             await page.waitFor(2000)
             let currentURL = page.url();
+            // console.log(server)
             // console.log(currentURL);
-            // currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation` ? console.log(true) : console.log(false);
+            // currentURL === `https://signup.${server}.leagueoflegends.com/en/signup/index#/confirmation` ? console.log(true) : console.log(false);
             let i = 0;
             let id = 0;
-            while (currentURL === `https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation`) {
+            // console.log("while loop start");
+            while (currentURL === `https://signup.${server}.leagueoflegends.com/en/signup/index#/confirmation`) {
                 await page.waitFor(2000)
                 await page.click("input[name=username]", { clickCount: 3 })
                 if (i === 0) {
@@ -68,7 +70,7 @@ function AccountCreater(server, key, howMany) {
                             key: key,
                             method: "userrecaptcha",
                             googlekey: "6Lc3HAsUAAAAACsN7CgY9MMVxo2M09n_e4heJEiZ",
-                            pageurl: "https://signup.eune.leagueoflegends.com/en/signup/index#/confirmation",
+                            pageurl: `https://signup.${server}.leagueoflegends.com/en/signup/index#/confirmation`,
                             json: "1"
                         })
                     })
@@ -145,6 +147,7 @@ function AccountCreater(server, key, howMany) {
                 // console.log("reload");
                 currentURL = page.url();
             }
+            // console.log("while loop end");
             await page.waitForSelector('.download-button', {
                 visible: true,
             })
@@ -152,8 +155,9 @@ function AccountCreater(server, key, howMany) {
             if (server == "EUNE") {
                 server = "EUN"
             }
-            console.log(server + ":" + nickname + ":" + password)
-            return (server + ":" + nickname + ":" + password),
+                
+                console.log(server + ":" + nickname + ":" + password)
+                return await (server + ":" + nickname + ":" + password),
                 await browser.close()
         })()
     }

@@ -1,19 +1,26 @@
 const express = require('express');
 const app = express()
+const bodyParser = require('body-parser')
 const AccountCreator = require('./accountCreator')
 
-AccountCreator(
-    serwer = "EUNE",
-    key = '63122cc0e691b00865562b861d5597b2',
-    howMany = 10
-)
 
-// app.get('/', function (req, res, next) {
-//     res.json({
-//         'status': 'Sukces!'
-//     })
-// })
-// app.listen(8080, function () {
-//     console.log('Listening!')
-// })
+app.use(bodyParser.json())
+
+app.post('/', async(req, res, next) => {
+    console.log(req.body)
+
+    return await res.send(AccountCreator(
+        server = req.body.server,
+        key = req.body.key,
+        howMany = req.body.howMany
+    ))
+})
+
+app.post('/accountCreator', function (req, res, next) {
+    AccountCreator(req.query)()
+})
+
+app.listen(8080, function () {
+    console.log('Listening!')
+})
 
