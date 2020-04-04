@@ -17,3 +17,4 @@ const createUserSchema = mongoose.Schema({
         default: 0,
     },
 })
+module.exports = mongoose.model('User', createUserSchema)

@@ -1,12 +1,11 @@
 const express = require('express');
 const app = express()
-const bodyParser = require('body-parser')
-const AccountCreator = require('./accountCreator')
+const AccountCreator = require('./models/accountCreator')
 const mongoose = require('mongoose')
 require('dotenv/config')
 
-app.use(bodyParser.json())
-
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // app.post('/', async(req, res, next) => {
 //     console.log(req.body)
@@ -19,9 +18,9 @@ app.use(bodyParser.json())
 //     await console.log(result, "result")
 // })
 //Import Routers
-const createAccount = require('./routes/createAccunt')
+const createUsers = require('./routes/createUsers')
 
-app.use('/', createAccount);
+app.use('/', createUsers);
 
 app.get('/', (req,res) => {
     res.send('You are in home')
