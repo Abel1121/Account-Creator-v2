@@ -157,7 +157,7 @@ function AccountCreater(server, key, howMany) {
             }
                 
                 console.log(server + ":" + nickname + ":" + password)
-                return await (server + ":" + nickname + ":" + password),
+                return (server + ":" + nickname + ":" + password),
                 await browser.close()
         })()
     }
