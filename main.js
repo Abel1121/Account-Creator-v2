@@ -7,16 +7,15 @@ require('dotenv/config')
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// app.post('/', async(req, res, next) => {
-//     console.log(req.body)
-
-//     const result = await AccountCreator(
-//         server = req.body.server,
-//         key = req.body.key,
-//         howMany = req.body.howMany,
-//     )
-//     await console.log(result, "result")
-// })
+app.get('/', async (req, res, next) => {
+    console.log(req.body)
+    const accountCreator = await AccountCreator(
+        server= req.body.server,
+        key= req.body.key,
+        howMany= req.body.howMany,
+    )
+    res.json(accountCreator)
+})
 //Import Routers
 const createUsers = require('./routes/createUsers')
 

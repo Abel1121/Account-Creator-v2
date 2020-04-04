@@ -1,13 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const createUser = require('../models/createUser')
+const CreateUser = require('../models/createUser')
 
-router.get('/', (req, res) => {
-    res.send('We are on posts')
+
+// Get back all accounts
+router.get('/createUsers', async (req, res) => {
+    try {
+        const createUsers = await CreateUser.find()
+        res.json(createUsers)
+    } catch (error) {
+        res.json({ message: error })
+    }
 })
 
-router.post('/createUsers', (req, res) => {
-    console.log(req.body)
-    res.send('Account created succefull')
-})
+//Add new account
+router.post('/createUsers', async (req, res) => {
+    const createUser = new CreateUser({
+        username: req.body.username,
+        password: req.body.password,
+    });
+    try {
+        const savedCreateUser = await createUser.save()
+        res.status(200)
+        res.json(data)
+    }
+    catch (error) {
+        res.status(404)
+        res.json({
+            message: error
+        });
+    }
+});
+
 module.exports = router;
