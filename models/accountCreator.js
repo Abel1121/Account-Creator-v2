@@ -5,7 +5,7 @@ const fetch = require("node-fetch");
 const jsonReturn = [];
 async function AccountCreater(server, key, howMany) {
         const nickList = ['Slaver', 'Jankos', 'Change', 'Full', 'Skill', 'Skull', 'Fairy', 'Buddie', 'Shard', 'Ninja', 'Keeper', 'Fantastic', 'Romance', 'Papa', 'Pengiun', 'Nami', 'Cat', 'White', 'Red', 'Yellow', 'Blue', 'Black', 'Brown', 'Orange', 'Grey', 'Green', 'Gold', 'Silver', 'Bronze', 'Diamond', 'Platinium', 'Challenger', 'Knight', 'Tank', 'Archer', 'Palladin', 'Druid', 'Sorccer', 'Human', 'Goblin', 'Dragon', 'Angel', 'Unicorn', 'Minotaur', 'Golem', 'Devil', 'Demon', 'Giant', 'Titan', 'Energy', 'Power', 'Master', 'Slime', 'Orc',
-            'Minions', 'Tower', 'King', 'Lord', 'Fighter', 'Noob', 'Smart', 'Maximum', 'Mighty', 'Stinky', 'Creepy', 'Blody', 'Crazy', 'Alcoholic', 'Special', 'Angry', 'Dirty', 'Secret', 'Retarded', 'Pscyho', 'Extreme', 'Zombie', 'Bikini', 'Smelly', 'Maniac', 'Penguin', 'Combat', 'Rat', 'Mecha', 'Clones', 'Super', 'Metal', 'Hidden', 'Dark', 'Icy', 'Sweet', 'Twin', 'Rage', 'Slayer', 'Thunder', 'Push'];
+            'Minions', 'Tower', 'King', 'Lord', 'Fighter', 'Noob', 'Smart', 'Maximum', 'Mighty', 'Stinky', 'Creepy', 'Blody', 'Crazy', 'Alcoholic', 'Special', 'Angry', 'Dirty', 'Secret', 'Retarded', 'Pscyho', 'Extreme', 'Zombie', 'Bikini', 'Smelly', 'Maniac', 'Penguin', 'Combat', 'Rat', 'Mecha', 'Clones', 'Super', 'Metal', 'Hidden', 'Dark', 'Icy', 'Sweet', 'Twin', 'Rage', 'Slayer', 'Thunder', 'Push', 'Lucky', 'Old', 'Ranger','Dude','Man','Woman','OldMan','Turtle','Shot','Warrior','Toy','Blade' ];
         let a = Math.random() * nickList.length;
         let b = Math.random() * nickList.length;
         let nickname = nickList[Math.round(a)] + nickList[Math.round(b)];
@@ -49,7 +49,7 @@ async function AccountCreater(server, key, howMany) {
         await page.waitForNavigation({ waitUntil: ['networkidle0', 'load', 'domcontentloaded'], timeout: 0 }).catch(error => console.log(error));
         await page.waitFor(2000)
         let currentURL = page.url();
-        console.log(server)
+        // console.log(server)
         // console.log(currentURL);
         // currentURL === `https://signup.${server}.leagueoflegends.com/en/signup/index#/confirmation` ? console.log(true) : console.log(false);
         let i = 0;
@@ -111,6 +111,14 @@ async function AccountCreater(server, key, howMany) {
                 await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)]);
             } else if (i === 3) {
                 await page.type('input[name=username]', nickList[Math.round(a)] + "s" + nickList[Math.round(b)] + "s");
+            } else if (i === 4) {
+                await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)] + "os");
+            } else if (i === 5) {
+                await page.type('input[name=username]', nickList[Math.round(a)] + "os" + nickList[Math.round(b)]);
+            } else if (i === 6) {
+                await page.type('input[name=username]', nickList[Math.round(a)] + "os" + nickList[Math.round(b)] + "os");
+            } else if (i === 6) {
+                await page.type('input[name=username]', nickList[Math.round(a)] + nickList[Math.round(b)] + "ey");
             }
             // console.log("send");
             await page.waitFor(1000);
