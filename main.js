@@ -17,9 +17,9 @@ app.get('/', async (req, res, next) => {
     res.json(accountCreator)
 })
 //Import Routers
-const createUsers = require('./routes/createUsers')
+const authRoute = require('./routes/auth')
 
-app.use('/', createUsers);
+app.use('/api/user', authRoute)
 
 app.get('/', (req,res) => {
     res.send('You are in home')

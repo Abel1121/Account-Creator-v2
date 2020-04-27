@@ -4,6 +4,7 @@
   "description": "League of Legends account Creator",
   "main": "main.js",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "body-parser": "^1.19.0",
     "browserify": "^16.5.0",
     "dotenv": "^8.2.0",
