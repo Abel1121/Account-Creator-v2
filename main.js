@@ -4,15 +4,16 @@ const AccountCreator = require('./models/accountCreator')
 const mongoose = require('mongoose')
 require('dotenv/config')
 
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get('/', async (req, res, next) => {
+app.post('/', async (req, res, next) => {
     console.log(req.body)
     const accountCreator = await AccountCreator(
         server= req.body.server,
         key= req.body.key,
-        howMany= req.body.howMany,
+        // howMany= +req.body.howMany,
     )
     res.json(accountCreator)
 })
