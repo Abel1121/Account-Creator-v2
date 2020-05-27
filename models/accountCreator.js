@@ -2,8 +2,9 @@
 'use strict';
 const puppeteer = require('puppeteer');
 const fetch = require("node-fetch");
-let jsonReturn = "";
+let jsonReturn = [];
 async function AccountCreater(server, key, howMany) {
+    for (let i = 0; i < howMany; ++i){
         const nickList = ['Slaver', 'Jankos', 'Change', 'Full', 'Skill', 'Skull', 'Fairy', 'Buddie', 'Shard', 'Ninja', 'Keeper', 'Fantastic', 'Romance', 'Papa', 'Pengiun', 'Nami', 'Cat', 'White', 'Red', 'Yellow', 'Blue', 'Black', 'Brown', 'Orange', 'Grey', 'Green', 'Gold', 'Silver', 'Bronze', 'Diamond', 'Platinium', 'Challenger', 'Knight', 'Tank', 'Archer', 'Palladin', 'Druid', 'Sorccer', 'Human', 'Goblin', 'Dragon', 'Angel', 'Unicorn', 'Minotaur', 'Golem', 'Devil', 'Demon', 'Giant', 'Titan', 'Energy', 'Power', 'Master', 'Slime', 'Orc',
             'Minions', 'Tower', 'King', 'Lord', 'Fighter', 'Noob', 'Smart', 'Maximum', 'Mighty', 'Stinky', 'Creepy', 'Blody', 'Crazy', 'Alcoholic', 'Special', 'Angry', 'Dirty', 'Secret', 'Pscyho', 'Extreme', 'Zombie', 'Bikini', 'Smelly', 'Maniac', 'Penguin', 'Combat', 'Rat', 'Mecha', 'Clones', 'Super', 'Metal', 'Hidden', 'Dark', 'Icy', 'Sweet', 'Twin', 'Rage', 'Slayer', 'Thunder', 'Push', 'Lucky', 'Old', 'Ranger','Dude','Man','Woman','OldMan','Turtle','Shot','Warrior','Toy','Blade' ];
         let a = Math.random() * nickList.length;
@@ -16,7 +17,7 @@ async function AccountCreater(server, key, howMany) {
             defaultViewport: null,
             slowMo: 20,
         });
-    try {
+    
         const page = await browser.newPage();
         await page.setViewport({
             width: 1920,
@@ -162,17 +163,20 @@ async function AccountCreater(server, key, howMany) {
             visible: true,
         })
         // console.log(page.url());
-        if (server == "EUNE") {
-            server = "EUN"
-        }
                 
-        console.log(server + ":" + nickname + ":" + password)
-        jsonReturn = `${server}:${nickname}:${password}`
-
-    } catch (error) {
-        console.log(error)
+        if (server === "eune") {   
+            jsonReturn.push(`EUN:${nickname}:${password}`)
+            console.log("EUN" + ":" + nickname + ":" + password)
+        } else if (server === "euw") {   
+            jsonReturn.push(`EUW:${nickname}:${password}`)
+            console.log("EUW" + ":" + nickname + ":" + password)
+        } else {
+            jsonReturn.push(`${server}:${nickname}:${password}`)
+            console.log(server + ":" + nickname + ":" + password)
+        }
+        await browser.close()
     }
-    await browser.close()
+    
     return jsonReturn;
 }
 AccountCreater();

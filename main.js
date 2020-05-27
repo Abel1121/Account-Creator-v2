@@ -13,7 +13,7 @@ app.post('/', async (req, res, next) => {
     const accountCreator = await AccountCreator(
         server= req.body.server,
         key= req.body.key,
-        // howMany= +req.body.howMany,
+        howMany= +req.body.howMany,
     )
     res.json(accountCreator)
 })
